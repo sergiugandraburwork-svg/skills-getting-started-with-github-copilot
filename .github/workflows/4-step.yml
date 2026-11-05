@@ -56,6 +56,23 @@ jobs:
 
       # START: Check practical exercise
 
+      - name: Set up Python
+        id: setup-python
+        continue-on-error: true
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install Python dependencies
+        id: install-dependencies
+        continue-on-error: true
+        run: python -m pip install -r requirements.txt
+
+      - name: Run backend tests
+        id: run-tests
+        continue-on-error: true
+        run: python -m pytest
+
       - name: Check for pytest keyphrase in requirements.txt
         id: check-for-pytest
         continue-on-error: true
@@ -91,6 +108,12 @@ jobs:
                 passed: ${{ steps.check-for-pytest.outcome == 'success' }}
               - description: "Checked if tests are added in a separate directory"
                 passed: ${{ steps.check-tests-dir.outcome == 'success' }}
+              - description: "Set up Python 3.13"
+                passed: ${{ steps.setup-python.outcome == 'success' }}
+              - description: "Installed Python dependencies"
+                passed: ${{ steps.install-dependencies.outcome == 'success' }}
+              - description: "Ran backend tests with pytest"
+                passed: ${{ steps.run-tests.outcome == 'success' }}
 
       # END: Check practical exercise
 
